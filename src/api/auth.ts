@@ -76,7 +76,6 @@ export const updateUserInfo = async (token: string, avatar: string, nickname: st
         },
       }
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("프로필 업데이트 에러 : ", error.response.message);
