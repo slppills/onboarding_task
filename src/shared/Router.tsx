@@ -4,6 +4,7 @@ import Main from "@/pages/Main";
 import Mypage from "@/pages/Mypage";
 import Signup from "@/pages/Signup";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute";
 
 const Router = () => {
   return (
@@ -13,7 +14,14 @@ const Router = () => {
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
           <Route path="/sign-up" element={<Signup />} />
-          <Route path="/mypage" element={<Mypage />} />
+          <Route
+            path="/mypage"
+            element={
+              <ProtectedRoute>
+                <Mypage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Layout>
     </BrowserRouter>
