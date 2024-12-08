@@ -1,12 +1,9 @@
-import { getUserInfo, updateUserInfo } from "@/api/auth";
 import { useEffect, useRef, useState } from "react";
-import { queryKeys } from "@/api/queryKeys";
 import { Cookies } from "react-cookie";
 import defaultProfile from "../../public/images/defaultProfile.jpg";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useUpdateUserInfo, useGetUserData } from "@/queries/userQueries";
 
 const Mypage = () => {
-  const queryClient = useQueryClient();
   const [isRenaming, setIsRenaming] = useState(false);
   const [userNickname, setUserNickname] = useState("");
   const [userAvatar, setUserAvatar] = useState("");
@@ -14,21 +11,9 @@ const Mypage = () => {
   const accessToken = cookies.get("access_token");
   const fileInputRef = useRef(null);
 
-  const { data: userData } = useQuery({
-    queryKey: queryKeys.userData,
-    queryFn: () => getUserInfo(accessToken),
-  });
+  const { data: userData } = useGetUserData(accessToken);
 
-  const mutation = useMutation({
-    mutationFn: ({ avatar, nickname }: { avatar: string; nickname: string }) =>
-      updateUserInfo(accessToken, avatar, nickname),
-    onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.userData, data);
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.userData,
-      });
-    },
-  });
+  const mutation = useUpdateUserInfo();
 
   const handleProfileClick = () => {
     if (fileInputRef.current) {
