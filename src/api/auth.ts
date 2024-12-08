@@ -6,9 +6,17 @@ import { NavigateFunction } from "react-router-dom";
 const cookies = new Cookies();
 const API_URL = "https://moneyfulpublicpolicy.co.kr";
 
+const instance = axios.create({
+  baseURL: API_URL,
+  timeout: 5000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 export const handleRegister = async (formData: SignupFormdata, navigate: NavigateFunction) => {
   try {
-    const response = await axios.post(`${API_URL}/register`, formData);
+    const response = await instance.post("/register", formData);
     if (response.data.success) {
       alert("회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.");
       navigate("/login");
@@ -28,7 +36,7 @@ export const handleLogin = async (
   setIsLoggedIn: (loggedIn: boolean) => void
 ) => {
   try {
-    const response = await axios.post(`${API_URL}/login?expiresIn=10m`, formData);
+    const response = await instance.post("/login?expiresIn=10m", formData);
     if (response.status === 200) {
       cookies.set("access_token", response.data.accessToken, {
         path: "/",
@@ -46,7 +54,7 @@ export const handleLogin = async (
 
 export const getUserInfo = async (token: string) => {
   try {
-    const response = await axios.get(`${API_URL}/user`, {
+    const response = await instance.get("/user", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -59,8 +67,8 @@ export const getUserInfo = async (token: string) => {
 
 export const updateUserInfo = async (token: string, avatar: string, nickname: string) => {
   try {
-    const response = await axios.patch(
-      `${API_URL}/profile`,
+    const response = await instance.patch(
+      "/profile",
       { avatar: [avatar], nickname },
       {
         headers: {
