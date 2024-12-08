@@ -18,7 +18,7 @@ const Header = () => {
   useEffect(() => {
     const checkTokenExpiration = () => {
       const token = cookies.access_token;
-      if (token) {
+      if (token && typeof token === "string") {
         const tokenData = JSON.parse(atob(token.split(".")[1]));
         const expirationTime = tokenData.exp * 1000; // accessToken의 만료 시간을 10분으로 설정
 
