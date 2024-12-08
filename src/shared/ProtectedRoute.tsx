@@ -2,7 +2,7 @@ import { useAuthStore } from "@/store/authStore";
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = (children) => {
+const ProtectedRoute = ({ children }) => {
   const { isLoggedIn } = useAuthStore();
 
   if (!isLoggedIn) {
